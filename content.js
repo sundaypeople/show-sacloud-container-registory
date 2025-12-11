@@ -12,22 +12,18 @@ function showContainerRegistryContents() {
         if (location.hash.includes("#!/appliance/containerregistry-detail/id=")) {
             console.log("details");
             setTimeout(async () => {
-                console.log(document.getElementsByClassName("flagrate-form-field-text"))
-                const hostnameElement = document.getElementsByClassName("flagrate-form-field-text")[2]
+                const hostnameElement = document.getElementsByClassName("flagrate-form-field-text")[3]
 
-
-                console.log(hostnameElement.innerHTML);
                 const storage = await chrome.storage.local.get(hostnameElement.innerHTML)
-                console.log(storage)
                 const tabBody = document.getElementsByClassName("flagrate-tab-body")[0]
                 const form = tabBody.appendChild(document.createElement("form"));
                 form.className = "flagrate flagrate-form";
                 chrome.runtime.sendMessage(
                     {
                         type: "GET_REGISTRY_CATALOG",
-                        username: "shower",
-                        password: "shower",
-                        hostname: "testinginx.sakuracr.jp"
+                        username: storage[hostnameElement.innerHTML].username,
+                        password: storage[hostnameElement.innerHTML].password,
+                        hostname: hostnameElement.innerHTML,
                     },
                     (response) => {
                         console.log("response from background:", response);

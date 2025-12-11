@@ -1,7 +1,6 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const {type,username,password,hostname} = message;
     if(type === "GET_REGISTRY_CATALOG") {
-        console.log("message", type);
         (async() => {
             try {
                 const tokenResponse = await fetch(`https://auth.sakuracr.jp/token/?service=${hostname}&scope=registry:catalog:*`,
