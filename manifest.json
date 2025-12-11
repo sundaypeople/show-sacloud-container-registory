@@ -1,0 +1,27 @@
+{
+  "name": "show-sacloud-container-registory",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "description": "This extension is able to show sacloud container registry contents",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "https://auth.sakuracr.jp/*",
+    "https://*.sakuracr.jp/*"
+  ],
+  "content_scripts": [{
+    "matches": ["https://secure.sakura.ad.jp/cloud/iaas/*"],
+    "js": [
+      "./content.js"
+    ]
+  }]
+}
