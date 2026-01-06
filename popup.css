@@ -1,7 +1,8 @@
 body {
     font-family: sans-serif;
     width: 200px;
-    height: 170px;
+    height: 200px;
+    padding-bottom: 10px;
 }
 
 #wrapper {

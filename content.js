@@ -1,3 +1,5 @@
+let checkTimer = null;
+
 window.addEventListener('hashchange', () => {
     showContainerRegistryContents()
 })
@@ -8,10 +10,20 @@ window.addEventListener('DOMContentLoaded', e => {
 showContainerRegistryContents()
 
 function showContainerRegistryContents() {
+
+    if (checkTimer) {
+        clearInterval(checkTimer);
+        checkTimer = null;
+    }
+
     if (location.hash.startsWith("#!")) {
         if (location.hash.includes("#!/appliance/containerregistry-detail/id=")) {
-            setTimeout(async () => {
+            checkTimer = setInterval(async () => {
                 console.log("start showContainerRegistryContents");
+                if (document.getElementById("show-sacloud-container-registory")) {
+                    clearInterval(checkTimer);
+                    return;
+                }
                 let hostname = null;
                 const hostnameElements = document.getElementsByClassName("flagrate-form-field-text")
                 for(let i = 0; i < hostnameElements.length; i++) {
@@ -21,13 +33,15 @@ function showContainerRegistryContents() {
                 }
                 if (!hostname) {
                     console.log("not found hostname");
-                    return
+                    return;
                 }
 
                 const storage = await chrome.storage.local.get(hostname)
                 const tabBody = document.getElementsByClassName("flagrate-tab-body")[0]
                 const form = tabBody.appendChild(document.createElement("form"));
                 form.className = "flagrate flagrate-form";
+                form.id = "show-sacloud-container-registory";
+                clearInterval(checkTimer)
                 chrome.runtime.sendMessage(
                     {
                         type: "GET_REGISTRY_CATALOG",
@@ -45,11 +59,10 @@ function showContainerRegistryContents() {
                                 p.innerHTML = r;
                                 p.className = "flagrate-form-field-text";
                             })
-
                         }
                     }
                 );
-            }, 3000)
+            }, 500)
         }
     }
 }
